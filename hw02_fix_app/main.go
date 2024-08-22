@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"hw02_fix_app/printer"
-	"hw02_fix_app/reader"
-	"hw02_fix_app/types"
+
+	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw02_fix_app/printer"
+	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw02_fix_app/reader"
+	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw02_fix_app/types"
 )
 
 func main() {
