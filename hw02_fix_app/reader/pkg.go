@@ -28,6 +28,5 @@ func ReadJSON(filePath string, _ int) ([]types.Employee, error) {
 	if err != nil {
 		fmt.Println("Ошибка чтения JSON-данных:", err)
 	}
-
 	return data, err
 }
