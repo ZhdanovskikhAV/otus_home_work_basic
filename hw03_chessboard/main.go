@@ -9,10 +9,9 @@ func main() {
 	for row := 0; row < size; row++ {
 		var (
 			str = ""
-			a   = ""
-			b   = ""
+			a   string
+			b   string
 		)
-
 		if row%2 == 0 {
 			a = "#"
 			b = " "
@@ -20,18 +19,13 @@ func main() {
 			a = " "
 			b = "#"
 		}
-
 		for column := 0; column < size; column++ {
 			if column%2 == 0 {
-				str = str + a
-
+				str += a
 			} else {
-				str = str + b
-
+				str += b
 			}
-
 		}
 		fmt.Printf("%s\n", str)
-
 	}
 }
