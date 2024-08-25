@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strings"
+)
 
 func main() {
 	var size int
@@ -8,32 +12,25 @@ func main() {
 	_, err := fmt.Scanf("%d\n", &size)
 	if err != nil {
 		fmt.Println("Error:", err)
+		os.Exit(0)
 	}
 	for row := 0; row < size; row++ {
-		str, a, b := findData(row)
+		var sb strings.Builder
+		a, b := findData(row)
 		for column := 0; column < size; column++ {
 			if column%2 == 0 {
-				str += a
+				sb.WriteRune(a)
 			} else {
-				str += b
+				sb.WriteRune(b)
 			}
 		}
-		fmt.Println(str)
+		fmt.Println(sb.String())
 	}
 }
 
-func findData(row int) (string, string, string) {
-	var (
-		str = ""
-		a   string
-		b   string
-	)
+func findData(row int) (rune, rune) {
 	if row%2 == 0 {
-		a = "#"
-		b = " "
-	} else {
-		a = " "
-		b = "#"
+		return '#', ' '
 	}
-	return str, a, b
+	return ' ', '#'
 }
