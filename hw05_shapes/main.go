@@ -17,6 +17,7 @@ type Circle struct {
 func (c Circle) Area() float64 {
 	return math.Pi * c.radius * c.radius
 }
+
 func (c Circle) String() string {
 	return fmt.Sprintf("Circle with radius %.2f", c.radius)
 }
@@ -51,6 +52,7 @@ func calculateArea(s any) (float64, error) {
 	}
 	return 0, errors.New("invalid shape")
 }
+
 func PrintArea(s any) {
 	area, err := calculateArea(s)
 	if err != nil {
