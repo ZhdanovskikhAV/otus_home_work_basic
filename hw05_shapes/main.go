@@ -11,27 +11,27 @@ type Shape interface {
 }
 
 type Circle struct {
-	radius float64
+	Radius float64
 }
 
 func (c Circle) Area() float64 {
-	return math.Pi * c.radius * c.radius
+	return math.Pi * c.Radius * c.Radius
 }
 
 func (c Circle) String() string {
-	return fmt.Sprintf("Circle with radius %.2f", c.radius)
+	return fmt.Sprintf("Circle with radius %.2f", c.Radius)
 }
 
 type Rectangle struct {
-	width, height float64
+	Width, Height float64
 }
 
 func (r Rectangle) Area() float64 {
-	return r.width * r.height
+	return r.Width * r.Height
 }
 
 func (r Rectangle) String() string {
-	return fmt.Sprintf("Rectangle with width %.2f and height %.2f", r.width, r.height)
+	return fmt.Sprintf("Rectangle with width %.2f and height %.2f", r.Width, r.Height)
 }
 
 type Triangle struct {
@@ -63,8 +63,8 @@ func PrintArea(s any) {
 }
 
 func main() {
-	circle := Circle{radius: 5}
-	rectangle := Rectangle{width: 4, height: 6}
+	circle := Circle{Radius: 5}
+	rectangle := Rectangle{Width: 4, Height: 6}
 	triangle := Triangle{Base: 8, Height: 6}
 
 	PrintArea(circle)
