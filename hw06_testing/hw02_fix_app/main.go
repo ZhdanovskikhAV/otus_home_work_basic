@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw02_fix_app/printer"
-	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw02_fix_app/reader"
-	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw02_fix_app/types"
+	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw06_testing/hw02_fix_app/printer"
+	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw06_testing/hw02_fix_app/reader"
+	"github.com/ZhdanovskikhAV/otus_home_work_basic/hw06_testing/hw02_fix_app/types"
 )
 
 func main() {
