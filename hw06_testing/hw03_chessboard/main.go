@@ -15,16 +15,8 @@ func main() {
 		os.Exit(0)
 	}
 	for row := 0; row < size; row++ {
-		var sb strings.Builder
-		a, b := findData(row)
-		for column := 0; column < size; column++ {
-			if column%2 == 0 {
-				sb.WriteRune(a)
-			} else {
-				sb.WriteRune(b)
-			}
-		}
-		fmt.Println(sb.String())
+		rowString := generateRow(row, size)
+		fmt.Println(rowString)
 	}
 }
 
@@ -33,4 +25,17 @@ func findData(row int) (rune, rune) {
 		return '#', ' '
 	}
 	return ' ', '#'
+}
+
+func generateRow(row, size int) string {
+	var sb strings.Builder
+	a, b := findData(row)
+	for column := 0; column < size; column++ {
+		if column%2 == 0 {
+			sb.WriteRune(a)
+		} else {
+			sb.WriteRune(b)
+		}
+	}
+	return sb.String()
 }
