@@ -3,7 +3,6 @@ module github.com/ZhdanovskikhAV/otus_home_work_basic/hw06_testing
 go 1.20
 
 require (
-	github.com/magiconair/properties v1.8.7
 	github.com/stretchr/testify v1.9.0
 )
 
