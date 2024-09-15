@@ -9,6 +9,7 @@ import (
 
 // ReadJSON читает JSON-данные из файла и возвращает срез структур Employee.
 func ReadJSON(filePath string) ([]types.Employee, error) {
+	var err error
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err

@@ -11,9 +11,9 @@ func TestGenerateRow(t *testing.T) {
 		expected string
 	}{
 		{0, 5, "# # #"},
-		{1, 5, " ####"},
-		{2, 4, "# # # "},
-		{3, 4, " ####"},
+		{1, 5, " # # "},
+		{2, 4, "# # "},
+		{3, 4, " # #"},
 	}
 
 	for _, test := range tests {
