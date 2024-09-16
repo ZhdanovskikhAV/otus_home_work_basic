@@ -43,7 +43,7 @@ func TestReadJSON(t *testing.T) {
 		{
 			name:  "Non-JSON input",
 			input: `This is not a JSON file.`,
-			//expected: []types.Employee{},
+			// expected: []types.Employee{},
 			expected: []types.Employee{},
 		},
 	}

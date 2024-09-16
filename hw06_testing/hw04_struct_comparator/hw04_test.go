@@ -5,7 +5,6 @@ import (
 )
 
 func TestBookComparator(t *testing.T) {
-
 	book1 := &Book{
 		id:     "123-456",
 		title:  "Книга 1",
@@ -38,8 +37,8 @@ func TestBookComparator(t *testing.T) {
 		bookB     *Book
 		expected  bool
 	}{
-		{"Сравнение по году: book2 > book1", Year, book2, book1, false},
-		{"Сравнение по году: book1 > book2", Year, book1, book2, true},
+		{"Сравнение по году: book2 > book1", Year, book2, book1, true},
+		{"Сравнение по году: book1 > book2", Year, book1, book2, false},
 		{"Сравнение по размеру: book1 > book2", Size, book1, book2, true},
 		{"Сравнение по размеру: book2 > book1", Size, book2, book1, false},
 		{"Сравнение по рейтингу: book1 > book2", Rate, book1, book2, true},

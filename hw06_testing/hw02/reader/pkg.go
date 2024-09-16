@@ -18,7 +18,7 @@ func ReadJSON(filePath string) ([]types.Employee, error) {
 
 	var data []types.Employee
 
-	if err := json.NewDecoder(f).Decode(&data); err != nil {
+	if err = json.NewDecoder(f).Decode(&data); err != nil {
 		return nil, err
 	}
 	return data, nil
