@@ -1,25 +1,39 @@
 package main
 
 import (
+	"strings"
 	"testing"
 )
 
-func TestGenerateRow(t *testing.T) {
-	tests := []struct {
-		row      int
-		size     int
-		expected string
-	}{
-		{0, 5, "# # #"},
-		{1, 5, " # # "},
-		{2, 4, "# # "},
-		{3, 4, " # #"},
+// Функция для генерации доски в виде строки
+func generateBoard(size int) string {
+	var sb strings.Builder
+	for row := 0; row < size; row++ {
+		sb.WriteString(generateRow(row, size))
+		sb.WriteString("\n") // Добавьте новую строку между рядами
+	}
+	return sb.String()
+}
+
+// Тестирование функции генерации доски
+func TestGenerateBoard(t *testing.T) {
+	// Ожидаемая доска для размера 3
+	expectedBoard := "# #\n # \n# #\n"
+
+	// Генерируем доску
+	board := generateBoard(3)
+
+	// Сравниваем результат
+	if board != expectedBoard {
+		t.Errorf("Expected:\n%sGot:\n%s", expectedBoard, board)
 	}
 
-	for _, test := range tests {
-		result := generateRow(test.row, test.size)
-		if result != test.expected {
-			t.Errorf("generateRow(%d, %d) = %q; want %q", test.row, test.size, result, test.expected)
-		}
+	// Ожидаемая доска для размера 4
+	expectedBoard = "# # \n # #\n# # \n # #\n"
+	board = generateBoard(4)
+
+	// Сравниваем результат
+	if board != expectedBoard {
+		t.Errorf("Expected:\n%sGot:\n%s", expectedBoard, board)
 	}
 }
