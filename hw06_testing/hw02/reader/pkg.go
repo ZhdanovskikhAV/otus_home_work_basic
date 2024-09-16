@@ -13,7 +13,6 @@ func ReadJSON(filePath string) ([]types.Employee, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
-
 	}
 	defer f.Close()
 
@@ -21,7 +20,6 @@ func ReadJSON(filePath string) ([]types.Employee, error) {
 
 	if err := json.NewDecoder(f).Decode(&data); err != nil {
 		return nil, err
-
 	}
 	return data, nil
 }
