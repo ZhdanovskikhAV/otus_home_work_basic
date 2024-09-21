@@ -9,7 +9,7 @@ import (
 func countWords(text string) map[string]int {
 	text = strings.ToLower(text)
 
-	re := regexp.MustCompile(`[^\p{L}\s]+`)
+	re := regexp.MustCompile(`[^\p{L}\p{N}\s]+`)
 	text = re.ReplaceAllString(text, " ")
 
 	words := strings.Fields(text)
@@ -24,7 +24,7 @@ func countWords(text string) map[string]int {
 }
 
 func main() {
-	text := "Привет, мир! Привет всем. Мир! Это тест, это тест!"
+	text := "Привет, мир! Привет всем. Мир! Это тест, это тест! k8s, log4j, ta4ka/ K8S"
 	wordCount := countWords(text)
 	fmt.Println(wordCount)
 }

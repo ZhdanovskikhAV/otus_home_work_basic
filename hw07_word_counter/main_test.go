@@ -12,12 +12,12 @@ func TestCountWords(t *testing.T) {
 		expected map[string]int
 	}{
 		{
-			input:    "Hello, world! Hello everyone. This is a test.",
-			expected: map[string]int{"hello": 2, "world": 1, "everyone": 1, "this": 1, "is": 1, "a": 1, "test": 1},
+			input:    "Hello, world! Hello everyone. This is a test. k8s",
+			expected: map[string]int{"hello": 2, "world": 1, "everyone": 1, "this": 1, "is": 1, "a": 1, "test": 1, "k8s": 1},
 		},
 		{
-			input:    "Go is great! Go is fast.",
-			expected: map[string]int{"go": 2, "is": 2, "great": 1, "fast": 1},
+			input:    "Go is great! Go is fast. o5",
+			expected: map[string]int{"go": 2, "is": 2, "great": 1, "fast": 1, "o5": 1},
 		},
 		{
 			input:    "",
