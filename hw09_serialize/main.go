@@ -60,15 +60,38 @@ func (b *Book) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Сериализация слайса книг
+func SerializeBooks(books []*pb.Book) ([]byte, error) {
+	bookList := &pb.BookList{Books: books}
+	return proto.Marshal(bookList)
+}
+
+// Десериализация слайса книг
+func DeserializeBooks(data []byte) ([]*pb.Book, error) {
+	bookList := &pb.BookList{}
+	if err := proto.Unmarshal(data, bookList); err != nil {
+		return nil, err
+	}
+	return bookList.Books, nil
+}
 func main() {
-	// Создаем экземпляр Book
+	// Создаем экземпляры книг
 	book := &pb.Book{
 		Id:     1,
-		Title:  "Книга1",
-		Author: "Иванов А.",
+		Title:  "Книга 1",
+		Author: "Автор 1",
 		Year:   1982,
 		Size:   142,
-		Rate:   6.2,
+		Rate:   8.5,
+	}
+
+	book2 := &pb.Book{
+		Id:     2,
+		Title:  "Книга 2",
+		Author: "Автор 2",
+		Year:   1990,
+		Size:   250,
+		Rate:   9.0,
 	}
 
 	// Сериализация в JSON
@@ -120,4 +143,21 @@ func main() {
 		log.Fatalf("Ошибка десериализации списка книг: %v", err)
 	}
 	fmt.Printf("Десериализованный список книг: %+v\n", newBookList)
+
+	// Сериализация слайса книг
+	books := []*pb.Book{book, book2}
+	data, err = SerializeBooks(books)
+	if err != nil {
+		log.Fatalf("Ошибка сериализации: %v", err)
+	}
+	log.Println("Сериализованные данные:", data)
+
+	// Десериализация слайса книг
+	newBooks, err := DeserializeBooks(data)
+	if err != nil {
+		log.Fatalf("Ошибка десериализации: %v", err)
+	}
+	for _, b := range newBooks {
+		log.Printf("Десериализованная книга: %+v\n", b)
+	}
 }
