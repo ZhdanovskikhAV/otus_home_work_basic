@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package main;
+
+option go_package='/bookproto';
+
+message Book {
+  int32 id = 1;       // Уникальный идентификатор книги
+  string title = 2;   // Название книги
+  string author = 3;  // Автор книги
+  int32 year = 4;     // Год издания
+  int32 size = 5;     // Размер книги в страницах
+  double rate = 6;    // Рейтинг книги, может быть дробным
+}
+
+message BookList {
+	repeated Book Books = 1;
+}
