@@ -86,8 +86,11 @@ func main() {
 	}
 	fmt.Printf("Десериализованная книга: %+v\n", newBook)
 
+	// Проверяем, реализует ли book интерфейс proto.Message
+	var msg proto.Message = book // Это безопасно, так как Book удовлетворяет интерфейсу
+
 	// Сериализация с использованием Protobuf
-	data, err := proto.Marshal(book)
+	data, err := proto.Marshal(msg)
 	if err != nil {
 		log.Fatalf("Ошибка сериализации Protobuf: %v", err)
 	}
