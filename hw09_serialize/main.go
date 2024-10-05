@@ -3,6 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+
+	pb "github.com/ZhdanovskikhAV/otus_home_work_basic/hw09_serialize/bookproto"
+	"google.golang.org/protobuf/proto"
 )
 
 type Book struct {
@@ -14,6 +18,11 @@ type Book struct {
 	Rate   float64 `json:"rate"`
 }
 
+// Реализация метода String для структуры Book
+func (b *Book) String() string {
+	return fmt.Sprintf("ID: %d, Title: %s, Author: %s, Year: %d, Size: %d, Rate: %.2f",
+		b.ID, b.Title, b.Author, b.Year, b.Size, b.Rate)
+}
 func (b *Book) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]interface{}{
 		"id":     b.ID,
@@ -52,8 +61,9 @@ func (b *Book) UnmarshalJSON(data []byte) error {
 }
 
 func main() {
-	book := Book{
-		ID:     1,
+	// Создаем экземпляр Book
+	book := &pb.Book{
+		Id:     1,
 		Title:  "Книга1",
 		Author: "Иванов А.",
 		Year:   1982,
@@ -64,24 +74,47 @@ func main() {
 	// Сериализация в JSON
 	jsonData, err := json.Marshal(book)
 	if err != nil {
-		fmt.Println("Ошибка сериализации:", err)
-		return
+		log.Fatalf("Ошибка сериализации JSON: %v", err)
 	}
 	fmt.Println("Сериализованный JSON:", string(jsonData))
 
 	// Десериализация из JSON
-	var newBook Book
-	err = json.Unmarshal(jsonData, &newBook)
+	newBook := &pb.Book{}
+	err = json.Unmarshal(jsonData, newBook)
 	if err != nil {
-		fmt.Println("Ошибка десериализации:", err)
-		return
+		log.Fatalf("Ошибка десериализации JSON: %v", err)
 	}
 	fmt.Printf("Десериализованная книга: %+v\n", newBook)
 
-	// Проверка десериализации
-	if book == newBook {
-		fmt.Println("Десериализация прошла успешно. Объекты совпадают!")
-	} else {
-		fmt.Println("Десериализация не удалась. Объекты различаются.")
+	// Сериализация с использованием Protobuf
+	data, err := proto.Marshal(book)
+	if err != nil {
+		log.Fatalf("Ошибка сериализации Protobuf: %v", err)
 	}
+	fmt.Println("Сериализованные данные Protobuf:", data)
+
+	// Десериализация из Protobuf
+	newBookProto := &pb.Book{}
+	if err := proto.Unmarshal(data, newBookProto); err != nil {
+		log.Fatalf("Ошибка десериализации Protobuf: %v", err)
+	}
+	fmt.Printf("Десериализованная книга из Protobuf: %+v\n", newBookProto)
+
+	// Создаем и сериализуем список книг
+	bookList := &pb.BookList{
+		Books: []*pb.Book{book, newBookProto},
+	}
+
+	listData, err := proto.Marshal(bookList)
+	if err != nil {
+		log.Fatalf("Ошибка сериализации списка книг: %v", err)
+	}
+	fmt.Println("Сериализованные данные списка книг:", listData)
+
+	// Десериализация списка книг
+	newBookList := &pb.BookList{}
+	if err := proto.Unmarshal(listData, newBookList); err != nil {
+		log.Fatalf("Ошибка десериализации списка книг: %v", err)
+	}
+	fmt.Printf("Десериализованный список книг: %+v\n", newBookList)
 }
