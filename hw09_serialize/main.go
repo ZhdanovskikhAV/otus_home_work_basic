@@ -18,11 +18,12 @@ type Book struct {
 	Rate   float64 `json:"rate"`
 }
 
-// Реализация метода String для структуры Book
+// Реализация метода String для структуры Book.
 func (b *Book) String() string {
 	return fmt.Sprintf("ID: %d, Title: %s, Author: %s, Year: %d, Size: %d, Rate: %.2f",
 		b.ID, b.Title, b.Author, b.Year, b.Size, b.Rate)
 }
+
 func (b *Book) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]interface{}{
 		"id":     b.ID,
@@ -44,12 +45,12 @@ func (b *Book) UnmarshalJSON(data []byte) error {
 		Rate   float64 `json:"rate"`
 	}
 
-	// Десериализуем данные в вспомогательную структуру
+	// Десериализуем данные в вспомогательную структуру.
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 
-	// Присваивание значений полям структуры Book
+	// Присваивание значений полям структуры Book.
 	b.ID = aux.ID
 	b.Title = aux.Title
 	b.Author = aux.Author
@@ -60,13 +61,13 @@ func (b *Book) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Сериализация слайса книг
+// Сериализация слайса книг.
 func SerializeBooks(books []*pb.Book) ([]byte, error) {
 	bookList := &pb.BookList{Books: books}
 	return proto.Marshal(bookList)
 }
 
-// Десериализация слайса книг
+// Десериализация слайса книг.
 func DeserializeBooks(data []byte) ([]*pb.Book, error) {
 	bookList := &pb.BookList{}
 	if err := proto.Unmarshal(data, bookList); err != nil {
@@ -74,6 +75,7 @@ func DeserializeBooks(data []byte) ([]*pb.Book, error) {
 	}
 	return bookList.Books, nil
 }
+
 func main() {
 	// Создаем экземпляры книг
 	book := &pb.Book{
@@ -121,7 +123,8 @@ func main() {
 
 	// Десериализация из Protobuf
 	newBookProto := &pb.Book{}
-	if err := proto.Unmarshal(data, newBookProto); err != nil {
+	if unmarshalErr := proto.Unmarshal(data, newBookProto); unmarshalErr != nil {
+		err = unmarshalErr
 		log.Fatalf("Ошибка десериализации Protobuf: %v", err)
 	}
 	fmt.Printf("Десериализованная книга из Protobuf: %+v\n", newBookProto)
@@ -139,7 +142,8 @@ func main() {
 
 	// Десериализация списка книг
 	newBookList := &pb.BookList{}
-	if err := proto.Unmarshal(listData, newBookList); err != nil {
+	if unmarshalErr := proto.Unmarshal(listData, newBookList); unmarshalErr != nil {
+		err = unmarshalErr
 		log.Fatalf("Ошибка десериализации списка книг: %v", err)
 	}
 	fmt.Printf("Десериализованный список книг: %+v\n", newBookList)
