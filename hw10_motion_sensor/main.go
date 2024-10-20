@@ -48,8 +48,7 @@ func sensorReadings(ctx context.Context, ch chan<- float64, wg *sync.WaitGroup) 
 
 // Функция для обработки данных.
 func processData(ch <-chan float64, processedCh chan<- float64, wg *sync.WaitGroup) {
-	defer wg.Done()          // Уменьшаем счетчик WaitGroup при завершении работы горутины.
-	defer close(processedCh) // Закрываем канал при завершении обработки.
+	defer wg.Done() // Уменьшаем счетчик WaitGroup при завершении работы горутины.
 
 	var sum float64
 	var count int

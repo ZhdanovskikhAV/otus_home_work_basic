@@ -54,6 +54,8 @@ func TestProcessData(t *testing.T) {
 	processedChannel := make(chan float64)
 	var wg sync.WaitGroup
 	wg.Add(1)
+
+	// Запускаем горутину для обработки данных.
 	go processData(dataChannel, processedChannel, &wg)
 
 	// Отправляем 10 значений для обработки.
@@ -62,16 +64,21 @@ func TestProcessData(t *testing.T) {
 	}
 	close(dataChannel) // Закрываем канал входных данных.
 
-	// Получаем все обработанные значения.
+	// Создаем отдельную горутину для закрытия processedChannel после завершения обработки.
 	go func() {
 		wg.Wait()               // Ожидаем завершения горутины.
 		close(processedChannel) // Закрываем канал обработанных данных.
 	}()
 
-	// Получаем среднее значение.
-	avg := <-processedChannel
+	// Получаем все обработанные значения.
+	var processedValues []float64
+	for avg := range processedChannel {
+		processedValues = append(processedValues, avg)
+	}
+
+	// Проверяем, что мы получили правильное среднее значение.
 	expectedAvg := 4.5 // Среднее от 0 до 9
-	if avg != expectedAvg {
-		t.Errorf("Ожидалось среднее: %.2f, но получено: %.2f", expectedAvg, avg)
+	if len(processedValues) != 1 || processedValues[0] != expectedAvg {
+		t.Errorf("Ожидалось среднее: %.2f, но получено: %.2f", expectedAvg, processedValues)
 	}
 }
