@@ -21,7 +21,6 @@ func CryptoRand(limit int) uint64 {
 // Функция для генерации случайных данных.
 func sensorReadings(ctx context.Context, ch chan<- float64, wg *sync.WaitGroup) {
 	defer wg.Done() // Уменьшаем счетчик WaitGroup при завершении работы горутины.
-	defer close(ch) // Закрываем канал при завершении работы горутины.
 
 	// Создаем таймер, который будет срабатывать через 1 минуту.
 	timer := time.NewTimer(1 * time.Minute)
@@ -29,18 +28,20 @@ func sensorReadings(ctx context.Context, ch chan<- float64, wg *sync.WaitGroup) 
 
 	for {
 		select {
-		case <-ctx.Done():
-			// Контекст завершен, выходим из функции.
+		case <-ctx.Done(): // Контекст завершен, выходим из функции.
 			fmt.Println("Горутина считывания завершена по просьбе!")
 			return
-		case <-timer.C:
-			// Таймер сработал, выходим из функции.
+		case <-timer.C: // Таймер сработал, выходим из функции.
 			fmt.Println("Горутина считывания завершена по времени!")
 			return
-		default:
-			// Генерация случайного значения в диапазоне [0, 100).
+		default: // Генерация случайного значения в диапазоне [0, 100).
 			data := float64(CryptoRand(100))
-			ch <- data
+			select {
+			case ch <- data:
+				fmt.Printf("Считано значение: %.2f\n", data)
+			default:
+				fmt.Println("Канал переполнен, значение не отправлено.")
+			}
 			time.Sleep(1 * time.Second) // Пауза между считываниями.
 		}
 	}
