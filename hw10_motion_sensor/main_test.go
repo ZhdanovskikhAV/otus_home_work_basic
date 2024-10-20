@@ -69,9 +69,10 @@ func TestProcessData(t *testing.T) {
 		wg.Wait()               // Ожидаем завершения горутины.
 		close(processedChannel) // Закрываем канал обработанных данных.
 	}()
+	// Предварительно выделяем память для processedValues.
+	processedValues := make([]float64, 0, 1) // Предполагаем, что будет 1 среднее значение.
 
 	// Получаем все обработанные значения.
-	var processedValues []float64
 	for avg := range processedChannel {
 		processedValues = append(processedValues, avg)
 	}
