@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"math/big"
+	"sync"
 	"time"
 )
 
@@ -18,14 +19,23 @@ func CryptoRand(limit int) uint64 {
 }
 
 // Функция для генерации случайных данных.
-func sensorReadings(ctx context.Context, ch chan<- float64) {
+func sensorReadings(ctx context.Context, ch chan<- float64, wg *sync.WaitGroup) {
+	defer wg.Done() // Уменьшаем счетчик WaitGroup при завершении работы горутины.
 	defer close(ch) // Закрываем канал при завершении работы горутины.
+
+	// Создаем таймер, который будет срабатывать через 1 минуту.
+	timer := time.NewTimer(1 * time.Minute)
+	defer timer.Stop() // Останавливаем таймер при завершении функции.
 
 	for {
 		select {
 		case <-ctx.Done():
 			// Контекст завершен, выходим из функции.
 			fmt.Println("Горутина считывания завершена по просьбе!")
+			return
+		case <-timer.C:
+			// Таймер сработал, выходим из функции.
+			fmt.Println("Горутина считывания завершена по времени!")
 			return
 		default:
 			// Генерация случайного значения в диапазоне [0, 100).
@@ -37,7 +47,8 @@ func sensorReadings(ctx context.Context, ch chan<- float64) {
 }
 
 // Функция для обработки данных.
-func processData(ch <-chan float64, processedCh chan<- float64) {
+func processData(ch <-chan float64, processedCh chan<- float64, wg *sync.WaitGroup) {
+	defer wg.Done()          // Уменьшаем счетчик WaitGroup при завершении работы горутины.
 	defer close(processedCh) // Закрываем канал при завершении обработки.
 
 	var sum float64
@@ -71,14 +82,28 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel() // Вызываем cancel при завершении main.
 
-	go sensorReadings(ctx, dataChannel)           // Запускаем горутину для считывания данных.
-	go processData(dataChannel, processedChannel) // Запускаем горутину для обработки данных.
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go sensorReadings(ctx, dataChannel, &wg) // Запускаем горутину для считывания данных.
+
+	wg.Add(1)
+	go processData(dataChannel, processedChannel, &wg) // Запускаем горутину для обработки данных.
 
 	// Главная горутина читает обработанные данные и выводит их на экран.
-	for avg := range processedChannel {
-		fmt.Printf("Среднее арифметическое: %.2f\n", avg)
-	}
+	go func() {
+		for avg := range processedChannel {
+			fmt.Printf("Среднее арифметическое: %.2f\n", avg)
+		}
+	}()
 
-	// Завершаем счетчик.
-	cancel() // Завершаем контекст, что вызывает завершение другой горутины.
+	// Ждем завершения горутины считывания.
+	wg.Wait()
+	// После завершения считывания, отменяем контекст, чтобы завершить обработку.
+	cancel()
+
+	// Ждем завершения горутины обработки данных.
+	wg.Wait()
+
+	fmt.Println("Все горутины завершены. Программа завершена.")
 }
