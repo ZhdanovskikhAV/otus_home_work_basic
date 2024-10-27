@@ -12,9 +12,9 @@ type Counter struct {
 }
 
 // Increment - метод для инкрементации счетчика.
-func (c *Counter) Increment() {
+func (c *Counter) Increment(increment int) {
 	c.mu.Lock()
-	c.value++
+	c.value += increment
 	c.mu.Unlock()
 }
 
@@ -28,27 +28,22 @@ func (c *Counter) GetValue() int {
 // RunGoroutines - функция, запускающая горутины для инкрементации счетчика.
 func RunGoroutines(c *Counter, numGoroutines, incrementsPerGoroutine int) {
 	var wg sync.WaitGroup
-	messageChannel := make(chan string, numGoroutines)
 
 	for i := 0; i < numGoroutines; i++ {
 		wg.Add(1)
-		go func(id int) {
+		go func() {
 			defer wg.Done()
+			// Накапливаем временный результат
+			tempSum := 0
 			for j := 0; j < incrementsPerGoroutine; j++ {
-				c.Increment()
+				tempSum++
 			}
-			messageChannel <- fmt.Sprintf("Goroutine %d finished its work.", id)
-		}(i)
+			// Добавляем временный результат к общему счетчику за одну блокировку
+			c.Increment(tempSum)
+		}()
 	}
 
-	go func() {
-		wg.Wait()
-		close(messageChannel)
-	}()
-
-	for message := range messageChannel {
-		fmt.Println(message)
-	}
+	wg.Wait()
 }
 
 func main() {
