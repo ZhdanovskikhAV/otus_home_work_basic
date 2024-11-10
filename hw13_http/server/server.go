@@ -10,10 +10,11 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
+	switch r.Method {
+	case http.MethodGet:
 		fmt.Printf("Получен GET запрос: %s\n", r.URL.Path)
 		w.Write([]byte("Hello from the server!"))
-	} else if r.Method == http.MethodPost {
+	case http.MethodPost:
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
 			http.Error(w, "Ошибка чтения тела запроса", http.StatusBadRequest)
@@ -23,6 +24,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Получен POST запрос: %s\n", r.URL.Path)
 		fmt.Printf("Данные POST запроса: %s\n", string(body))
 		w.Write([]byte("Data received!"))
+	default:
+		// Обработка других методов
+		http.Error(w, "Метод не разрешен", http.StatusMethodNotAllowed)
 	}
 }
 
