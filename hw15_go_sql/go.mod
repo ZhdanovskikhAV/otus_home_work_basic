@@ -1,6 +1,6 @@
 module github.com/ZhdanovskikhAV/otus_home_work_basic/hw15_go_sql
 
-go 1.21.0
+go 1.23
 
 //toolchain go1.23.0
 
