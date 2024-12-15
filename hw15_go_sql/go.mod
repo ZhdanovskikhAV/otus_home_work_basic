@@ -2,7 +2,7 @@ module github.com/ZhdanovskikhAV/otus_home_work_basic/hw15_go_sql
 
 go 1.21.0
 
-toolchain go1.23.0
+//toolchain go1.23.0
 
 require (
 	github.com/google/uuid v1.6.0

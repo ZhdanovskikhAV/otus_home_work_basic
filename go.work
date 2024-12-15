@@ -1,4 +1,4 @@
-go 1.23.0
+go 1.23
 use (
 	./hw02_fix_app
 	./hw03_chessboard
