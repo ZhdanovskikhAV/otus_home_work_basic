@@ -1,5 +1,4 @@
-go 1.20
-
+go 1.23
 use (
 	./hw02_fix_app
 	./hw03_chessboard
@@ -13,6 +12,7 @@ use (
 	./hw11_worker_pool
 	./hw12_log_util
 	./hw13_http
+	./hw14_sql
 	./hw15_go_sql
 	./hw16_docker
 )
