@@ -1,0 +1,34 @@
+services:
+  app:
+    
+    image: hw16_docker:dev  # Указывает на образ приложения
+    container_name: app  # Имя контейнера для вашего приложения
+    ports:
+      - ${APP_HTTP_PORT}:8080  # Пробрасывает порт приложения
+    env_file:
+      - .env  # Загружает переменные окружения из файла .env
+    environment:
+      APP_DB_DATABASE: ${APP_DB_DATABASE}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+    #links:
+    #  - pg-storage  # Связывает контейнер с pg-storage (необязательно в новых версиях Docker)
+    depends_on:
+      - pg-storage  # Указывает, что приложение зависит от pg-storage
+  
+  pg-storage:
+    env_file:
+      - .env  # Загружает переменные окружения из файла .env
+    image: postgres:16.2-alpine  # Образ PostgreSQL
+    container_name: pg-storage  # Имя контейнера PostgreSQL
+    environment:
+      POSTGRES_DB: ${APP_DB_DATABASE}  # Переменная окружения для имени базы данных
+      POSTGRES_USER: ${APP_DB_USER}  # Переменная окружения для имени пользователя
+      POSTGRES_PASSWORD: ${APP_DB_PASSWORD}  # Переменная окружения для пароля
+      PGDATA: "/var/lib/postgresql/data/pgdata"  # Путь к данным PostgreSQL
+    volumes:
+      - ./localdata/pg-storage:/var/lib/postgresql/data  # Монтирование локальной директории для хранения данных
+    ports:
+      - ${APP_DB_PORT}:5432  # Пробрасывает порт PostgreSQL
+ 
+
